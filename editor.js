@@ -151,7 +151,7 @@ async function doLogin(){
   btn.disabled = true; btn.textContent = 'যাচাই হচ্ছে…';
   var r = await SB.auth.signInWithPassword({ email: em, password: pw });
   btn.disabled = false; btn.textContent = 'প্রবেশ করুন';
-  if (r.error){ toastE('ভুল ইমেইল বা পাসওয়ার্ড!'); return; }
+  if (r.error){ toastE('এরর: ' + r.error.message); return; }
   document.getElementById('lgPass').value = '';
   document.getElementById('edLogin').classList.remove('open');
   toastE('স্বাগতম! Ctrl+E চাপুন');
