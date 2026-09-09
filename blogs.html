@@ -57,9 +57,8 @@ button{font-family:inherit;color:inherit}
 .post-body{padding:1.2rem 1.3rem 1.4rem}
 .post-body .mono{color:var(--accent);display:block;margin-bottom:.5rem}
 .post-title{font-family:var(--f-bn);font-weight:600;font-size:1.15rem;line-height:1.5}
-.post-ex{color:var(--muted);font-weight:300;font-size:.92rem;margin-top:.5rem;font-family:var(--f-bn)}
+.post-ex{color:var(--muted);font-weight:300;font-size:.92rem;margin-top:.5rem;font-family:var(--f-bn);display:block}
 .empty{border:1px dashed var(--line);border-radius:4px;padding:2.5rem;text-align:center;color:var(--faint)}
-/* একক পোস্ট */
 .article{max-width:720px;margin-inline:auto}
 .back{display:inline-flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;font-family:var(--f-head);font-weight:500;font-size:.92rem;margin-bottom:2rem;transition:.3s}
 .back:hover{color:var(--accent)}
@@ -70,6 +69,9 @@ button{font-family:inherit;color:inherit}
 .a-body p{margin-bottom:1.4rem}
 .a-body p:first-child::first-letter{font-size:1.5em;font-weight:600;color:var(--accent)}
 .pending{border:1px dashed var(--line);border-radius:4px;padding:1.5rem;color:var(--faint);font-family:var(--f-bn);text-align:center}
+.toast-wrap{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%);z-index:4000;width:max-content;max-width:92vw}
+.toast{display:flex;align-items:center;gap:.7rem;background:var(--ink);color:var(--bg);padding:.85rem 1.4rem;border-radius:3px;font-family:var(--f-head);font-weight:500;font-size:.92rem;opacity:0;transform:translateY(14px);transition:.4s;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.toast.show{opacity:1;transform:none}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -91,8 +93,12 @@ button{font-family:inherit;color:inherit}
 </header>
 
 <main class="wrap page" id="root"></main>
+<div class="toast-wrap" id="toastWrap"></div>
 
 <script src="posts.js"></script>
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="editor.js"></script>
 <script>
 "use strict";
 var root = document.getElementById('root');
@@ -107,16 +113,24 @@ document.getElementById('themeBtn').addEventListener('click', function(){
   try{ localStorage.setItem('shifat-theme', next); }catch(e){}
 });
 
-var posts = (typeof BLOG_POSTS !== 'undefined') ? BLOG_POSTS.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }) : [];
-var slug = new URLSearchParams(location.search).get('p');
+function pbtns(slug){
+  return '<span class="pebtns">' +
+    '<button class="pebtn edit" title="Edit post" aria-label="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' +
+    '<button class="pebtn del" title="Delete post" aria-label="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>' +
+  '</span>';
+}
 
-if (slug){
-  /* ─── একক পোস্ট ─── */
-  var p = null;
-  for (var i=0;i<posts.length;i++){ if (posts[i].slug === slug){ p = posts[i]; break; } }
-  if (!p){
-    root.innerHTML = '<div class="empty">Post not found. <a href="blogs.html" style="color:var(--accent)">← Back to blogs</a></div>';
-  } else {
+function render(){
+  var posts = ShifatEditor.posts || [];
+  var slug = new URLSearchParams(location.search).get('p');
+
+  if (slug){
+    var p = null;
+    for (var i=0;i<posts.length;i++){ if (posts[i].slug === slug){ p = posts[i]; break; } }
+    if (!p){
+      root.innerHTML = '<div class="empty">Post not found. <a href="blogs.html" style="color:var(--accent)">← Back to blogs</a></div>';
+      return;
+    }
     document.title = p.title + ' — Md. Tawhidul Islam Shifat';
     var paras = (p.body||'').split(/\n\s*\n/).filter(function(x){ return x.trim(); });
     var html = '<article class="article">' +
@@ -132,20 +146,21 @@ if (slug){
     }
     html += '</div><div style="margin-top:3rem"><a class="back" href="blogs.html">← All blogs</a></div></article>';
     root.innerHTML = html;
+  } else {
+    var listHtml = posts.length
+      ? '<div class="grid">' + posts.map(function(p){
+          var ex = (p.body||'').replace(/\s+/g,' ').trim().slice(0,110);
+          return '<a class="post" href="blogs.html?p=' + encodeURIComponent(p.slug) + '" data-slug="' + p.slug + '">' +
+            '<span class="post-img"><img src="' + (p.cover||'') + '" alt="' + esc(p.title) + '" loading="lazy" onerror="this.style.display=\'none\'"></span>' +
+            '<span class="post-body"><span class="mono">' + fmtDate(p.date) + '</span><span class="post-title">' + esc(p.title) + '</span>' +
+            (ex ? '<span class="post-ex">' + esc(ex) + '…</span>' : '') + '</span>' + pbtns(p.slug) + '</a>';
+        }).join('') + '</div>'
+      : '<div class="empty">No posts yet — প্রথম লেখাটি খুব শীগ্রই আসছে।</div>';
+    root.innerHTML = '<div class="page-head"><h1>My Blogs</h1><p>খুদ্র চিন্তার জগৎ — ছোট ছোট লেখা, মাঝে মাঝে।</p></div>' + listHtml;
   }
-} else {
-  /* ─── তালিকা ─── */
-  var listHtml = posts.length
-    ? '<div class="grid">' + posts.map(function(p){
-        var ex = (p.body||'').replace(/\s+/g,' ').trim().slice(0,110);
-        return '<a class="post" href="blogs.html?p=' + encodeURIComponent(p.slug) + '">' +
-          '<span class="post-img"><img src="' + (p.cover||'') + '" alt="' + esc(p.title) + '" loading="lazy" onerror="this.style.display=\'none\'"></span>' +
-          '<span class="post-body"><span class="mono">' + fmtDate(p.date) + '</span><span class="post-title">' + esc(p.title) + '</span>' +
-          (ex ? '<span class="post-ex">' + esc(ex) + '…</span>' : '') + '</span></a>';
-      }).join('') + '</div>'
-    : '<div class="empty">No posts yet — প্রথম লেখাটি খুব শীগ্রই আসছে।</div>';
-  root.innerHTML = '<div class="page-head"><h1>My Blogs</h1><p>খুদ্র চিন্তার জগৎ — ছোট ছোট লেখা, মাঝে মাঝে।</p></div>' + listHtml;
 }
+ShifatEditor.onChange = render;
+ShifatEditor.init();
 </script>
 </body>
 </html>

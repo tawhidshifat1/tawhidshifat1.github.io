@@ -38,7 +38,6 @@ button{font-family:inherit;color:inherit}
 .wrap{width:min(1180px,100% - clamp(2.4rem,7vw,7rem));margin-inline:auto}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 section[id]{scroll-margin-top:88px}
-
 html.js .reveal{opacity:0;transform:translateY(34px);transition:opacity .85s ease,transform .85s cubic-bezier(.19,1,.22,1);transition-delay:var(--d,0s)}
 html.js .reveal.in{opacity:1;transform:none}
 html.js .hero-left>*{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.19,1,.22,1)}
@@ -48,8 +47,6 @@ html.js body.loaded .hero-left>*:nth-child(2){transition-delay:.13s}
 html.js body.loaded .hero-left>*:nth-child(3){transition-delay:.21s}
 html.js body.loaded .hero-left>*:nth-child(4){transition-delay:.29s}
 html.js body.loaded .hero-left>*:nth-child(5){transition-delay:.37s}
-
-/* নেভ */
 .nav{position:fixed;top:0;left:0;right:0;z-index:1000;border-bottom:1px solid transparent;transition:transform .45s,background .35s,border-color .35s}
 .nav.solid{background:rgba(21,20,18,.86);backdrop-filter:blur(12px);border-color:var(--line)}
 [data-theme="light"] .nav.solid{background:rgba(244,241,233,.86)}
@@ -78,8 +75,6 @@ body.menu-open .mmenu{clip-path:inset(0);visibility:visible}
 .mmenu a{font-family:var(--f-head);font-weight:600;font-size:clamp(1.8rem,8vw,3rem);letter-spacing:-.03em;text-decoration:none;padding:.6rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
 .mmenu a small{font-family:var(--f-mono);font-size:.75rem;color:var(--accent)}
 .mmenu-foot{margin-top:2rem;color:var(--muted)}
-
-/* হিরো */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative;
   background:url("https://shifat1.weebly.com/uploads/1/4/6/4/146429613/background-images/133030382.png") center/cover no-repeat}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(100deg,rgba(12,11,9,.92) 20%,rgba(12,11,9,.55) 65%,rgba(12,11,9,.35))}
@@ -106,8 +101,6 @@ body.menu-open .mmenu{clip-path:inset(0);visibility:visible}
 .hero-ids .org{font-family:var(--f-head);font-weight:500;font-size:.95rem}
 .dia{width:6px;height:6px;background:var(--accent);transform:rotate(45deg);flex:none}
 .hero-ids .note{margin-left:auto;color:var(--muted)}
-
-/* সেকশন কমন */
 section{padding-block:clamp(4.5rem,11vh,8rem)}
 #about,#blogs,#research,#awards,#contact{border-top:1px solid var(--line)}
 .sec-tag{color:var(--muted);margin-bottom:1rem}
@@ -115,8 +108,6 @@ section{padding-block:clamp(4.5rem,11vh,8rem)}
 .sec-head{margin-bottom:clamp(2.4rem,6vh,3.6rem)}
 .sec-head h2{font-family:var(--f-head);font-weight:600;font-size:clamp(1.9rem,4.6vw,3rem);letter-spacing:-.025em;line-height:1.15}
 .sec-head h2 em{font-style:italic;font-weight:500;color:var(--accent)}
-
-/* About */
 .about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2.5rem,6vw,5rem);align-items:start}
 .lead-slm{font-family:var(--f-head);font-weight:500;font-size:1.2rem;color:var(--accent);margin-bottom:1.2rem}
 .about-text p{font-weight:300;color:var(--muted);margin-bottom:1.3rem;max-width:60ch}
@@ -129,8 +120,6 @@ section{padding-block:clamp(4.5rem,11vh,8rem)}
 .fact{display:flex;justify-content:space-between;gap:1.5rem;padding:1rem 0;border-bottom:1px solid var(--line)}
 .fact dt{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding-top:.25rem}
 .fact dd{font-family:var(--f-head);font-weight:500;font-size:.95rem;text-align:right;line-height:1.55}
-
-/* Blogs */
 .bn-lede{font-family:var(--f-bn);font-size:clamp(1.08rem,2.2vw,1.32rem);line-height:2.05;color:var(--ink);border-left:2px solid var(--accent);padding-left:clamp(1.2rem,3vw,2rem);max-width:64ch;margin-bottom:clamp(2.5rem,6vh,3.5rem)}
 .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
 .post{background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.19,1,.22,1),border-color .3s}
@@ -143,8 +132,6 @@ section{padding-block:clamp(4.5rem,11vh,8rem)}
 .post-link{margin-top:auto;padding:0 1.4rem 1.4rem;display:flex;align-items:center;gap:.5rem;color:var(--muted);font-family:var(--f-head);font-weight:500;font-size:.9rem}
 .post:hover .post-link{color:var(--accent)}
 .blog-empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:4px;padding:2rem;text-align:center;color:var(--faint)}
-
-/* Research/Awards কমন */
 .tabs{display:flex;gap:.6rem;margin-bottom:2rem;flex-wrap:wrap}
 .tab{background:none;border:1px solid var(--line);border-radius:999px;padding:.55rem 1.4rem;font-family:var(--f-head);font-weight:500;font-size:.9rem;transition:.3s}
 .tab:hover{border-color:var(--accent)}
@@ -161,12 +148,10 @@ section{padding-block:clamp(4.5rem,11vh,8rem)}
 .cert-thumb img{width:100%;height:100%;object-fit:cover}
 .cert-thumb.is-pdf{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;color:var(--accent);font-family:var(--f-mono);font-size:.7rem;letter-spacing:.12em}
 .more-wrap{text-align:center;margin-top:2.2rem}
-.more-btn{display:inline-flex;align-items:center;gap:.6rem;background:none;border:1px solid var(--line);border-radius:999px;padding:.8rem 2rem;font-family:var(--f-head);font-weight:500;font-size:.95rem;transition:.3s}
+.more-btn{display:inline-flex;align-items:center;gap:.6rem;background:none;border:1px solid var(--line);border-radius:999px;padding:.8rem 2rem;font-family:var(--f-head);font-weight:500;font-size:.95rem;transition:.3s;text-decoration:none;color:inherit}
 .more-btn:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.6rem,4vw,3rem)}
 .two-col h3{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:1.2rem}
-
-/* স্লাইডশো */
 .slide-stage{position:relative;max-width:840px;margin-inline:auto;aspect-ratio:4/3;overflow:hidden;border-radius:6px;border:1px solid var(--line);cursor:zoom-in;background:var(--surface)}
 .slide-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
 .slide-stage img.on{opacity:1}
@@ -179,8 +164,6 @@ section{padding-block:clamp(4.5rem,11vh,8rem)}
 .thumbs button{flex:0 0 auto;width:76px;height:56px;border-radius:4px;overflow:hidden;border:1px solid var(--line);padding:0;background:none;opacity:.5;transition:.3s}
 .thumbs button.on{opacity:1;border-color:var(--accent)}
 .thumbs img{width:100%;height:100%;object-fit:cover}
-
-/* More ভিউ + ভিউয়ার */
 .moreov{position:fixed;inset:0;z-index:2200;background:var(--bg);overflow-y:auto;visibility:hidden;opacity:0;transition:.4s}
 .moreov.open{visibility:visible;opacity:1}
 .moreov-head{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -206,8 +189,6 @@ section{padding-block:clamp(4.5rem,11vh,8rem)}
 .lb-x{top:1.4rem;right:1.4rem}
 .lb-prev{left:1.4rem;top:50%;transform:translateY(-50%)}
 .lb-next{right:1.4rem;top:50%;transform:translateY(-50%)}
-
-/* Video / Contact / ফুটার */
 .video-band{text-align:center}
 .awesome{font-family:var(--f-head);font-weight:500;font-style:italic;font-size:clamp(1.5rem,4vw,2.6rem);letter-spacing:-.02em;margin-bottom:2.6rem}
 .awesome em{color:var(--accent)}
@@ -245,7 +226,6 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
 .toast{display:flex;align-items:center;gap:.7rem;background:var(--ink);color:var(--bg);padding:.85rem 1.4rem;border-radius:3px;font-family:var(--f-head);font-weight:500;font-size:.92rem;opacity:0;transform:translateY(14px);transition:.4s;box-shadow:0 12px 30px rgba(0,0,0,.3)}
 .toast.show{opacity:1;transform:none}
 .toast svg{color:var(--accent);flex:none}
-
 @media(max-width:920px){
   .nav-links,.resume-btn{display:none}
   .burger{display:flex}
@@ -308,10 +288,10 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
   <section class="hero" id="top">
     <div class="wrap">
       <div class="hero-left">
-        <p class="eyebrow mono">Assalamu Alaikum — Welcome to my era</p>
+        <p class="eyebrow mono" data-skey="hero_eyebrow">Assalamu Alaikum — Welcome to my era</p>
         <h1 class="hero-title">Md. Tawhidul<br>Islam Shifat</h1>
         <p class="typer-row"><span id="typer">Research Enthusiast</span><span class="caret" aria-hidden="true"></span></p>
-        <p class="hero-sub">A <strong>research enthusiast</strong> — Postgraduate student at <strong>IIUC</strong>, Accounts &amp; Finance Executive at <strong>World Assembly of Muslim Youth (WAMY Bangladesh)</strong>, Former Teaching Assistant at <strong>Shikho Technologies</strong>, Former Debater at <strong>IIUC Debating Community (IIUCDC)</strong>, Former Debate Secretary at <strong>IIUC Economics &amp; Banking Club</strong>.</p>
+        <p class="hero-sub" data-skey="hero_sub">A <strong>research enthusiast</strong> — Postgraduate student at <strong>IIUC</strong>, Accounts &amp; Finance Executive at <strong>World Assembly of Muslim Youth (WAMY Bangladesh)</strong>, Former Teaching Assistant at <strong>Shikho Technologies</strong>, Former Debater at <strong>IIUC Debating Community (IIUCDC)</strong>, Former Debate Secretary at <strong>IIUC Economics &amp; Banking Club</strong>.</p>
         <div class="btn-row">
           <a class="btn" href="blogs.html">Read my blogs..
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
@@ -337,11 +317,11 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
       </div>
       <div class="about-grid">
         <div class="about-text">
-          <p class="lead-slm reveal">Assalamu Alaikum.</p>
-          <p class="reveal">I am a <strong>motivated, hardworking student</strong> aiming to achieve my personal and professional goals in an environment that encourages growth and excellence. A quick learner who communicates effectively — an adaptable person with tremendous passion and devotion towards my goals.</p>
-          <p class="reveal" style="--d:.08s">I'd like to turn my hobby into a career that lets me balance work and life. My goal is to work somewhere my skills are appreciated and genuinely help the team.</p>
-          <p class="reveal" style="--d:.14s">I am a <strong>research-oriented person</strong>, well-versed in basic data-related software, currently working on research articles. I want to connect with people who are truly research-minded — to learn more about research and the environment around us.</p>
-          <p class="reveal" style="--d:.2s">I'm a very friendly person. If you have any suggestions, please give me feedback and I will correct myself. <strong>Don't hesitate to knock on my door.</strong> Gratitude and thanks for visiting my profile.</p>
+          <p class="lead-slm reveal" data-skey="about_slm">Assalamu Alaikum.</p>
+          <p class="reveal" data-skey="about_p1">I am a <strong>motivated, hardworking student</strong> aiming to achieve my personal and professional goals in an environment that encourages growth and excellence. A quick learner who communicates effectively — an adaptable person with tremendous passion and devotion towards my goals.</p>
+          <p class="reveal" style="--d:.08s" data-skey="about_p2">I'd like to turn my hobby into a career that lets me balance work and life. My goal is to work somewhere my skills are appreciated and genuinely help the team.</p>
+          <p class="reveal" style="--d:.14s" data-skey="about_p3">I am a <strong>research-oriented person</strong>, well-versed in basic data-related software, currently working on research articles. I want to connect with people who are truly research-minded — to learn more about research and the environment around us.</p>
+          <p class="reveal" style="--d:.2s" data-skey="about_p4">I'm a very friendly person. If you have any suggestions, please give me feedback and I will correct myself. <strong>Don't hesitate to knock on my door.</strong> Gratitude and thanks for visiting my profile.</p>
         </div>
         <div class="reveal" style="--d:.12s">
           <div class="roles">
@@ -371,10 +351,9 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
         <p class="sec-tag mono"><b>02</b>My Blogs</p>
         <h2>Small thoughts, <em>written down</em></h2>
       </div>
-      <p class="bn-lede reveal">আমাদের চিন্তার জগৎ সীমিত। মানুষ খুব কম চিন্তা করে কাজ শুরু করে। এজন্যই মানুষের সফলতা ও বিফলতা চিন্তুক মানুষের হস্তগত হয় এবং যারা অন্যের চিন্তাকে প্রলুদ্ধ করে সফল হয় তারা হতে পারে তবে ইউনিক মানুষ এবং মনে রাখার মানুষে পরিনত হতে পারেনা। প্রত্যেক মানুষেরই স্বকীয় চিন্তার জগৎ রয়েছে। তারা চাইলেই সেই চিন্তা দিয়ে অনেক আইডিওলজি ক্রিয়েট করতে পারে এবং তার ব্যাবহারেই অন্যরকম একটা জীবন কাটাতে পারে। কারন, চিন্তার উর্দ্ধে গিয়ে কেউ কখনোই জীবনের নৌকা তীরে ভেড়ায় নাহ। স্রোতে গা এলিয়ে দেয়া আর স্রোত ডিঙ্গিয়ে কাজ করাটাই এই দুনিয়ার চিন্তাগত চ্যালেঞ্জ। এই চিন্তার যুদ্ধে আমি এক চিন্তুক, সাদামাটা চিন্তায় লেখক স্বত্তা প্রকাশ করি। এই ক্ষুদ্র চিন্তা গুলো পড়তে আসায় স্বাগতম। সে সাথে অনুরোধ থাকবে, নতুন চিন্তার জগতকে সমৃদ্ধ করতে এগিয়ে আসার প্রতি।</p>
-      <!-- সর্বশেষ ৩টা ব্লগ posts.js থেকে স্বয়ংক্রিয়ভাবে আসে -->
+      <p class="bn-lede reveal" data-skey="blogs_lede">আমাদের চিন্তার জগৎ সীমিত। মানুষ খুব কম চিন্তা করে কাজ শুরু করে। এজন্যই মানুষের সফলতা ও বিফলতা চিন্তুক মানুষের হস্তগত হয় এবং যারা অন্যের চিন্তাকে প্রলুদ্ধ করে সফল হয় তারা হতে পারে তবে ইউনিক মানুষ এবং মনে রাখার মানুষে পরিনত হতে পারেনা। প্রত্যেক মানুষেরই স্বকীয় চিন্তার জগৎ রয়েছে। তারা চাইলেই সেই চিন্তা দিয়ে অনেক আইডিওলজি ক্রিয়েট করতে পারে এবং তার ব্যাবহারেই অন্যরকম একটা জীবন কাটাতে পারে। কারন, চিন্তার উর্দ্ধে গিয়ে কেউ কখনোই জীবনের নৌকা তীরে ভেড়ায় নাহ। স্রোতে গা এলিয়ে দেয়া আর স্রোত ডিঙ্গিয়ে কাজ করাটাই এই দুনিয়ার চিন্তাগত চ্যালেঞ্জ। এই চিন্তার যুদ্ধে আমি এক চিন্তুক, সাদামাটা চিন্তায় লেখক স্বত্তা প্রকাশ করি। এই ক্ষুদ্র চিন্তা গুলো পড়তে আসায় স্বাগতম। সে সাথে অনুরোধ থাকবে, নতুন চিন্তার জগতকে সমৃদ্ধ করতে এগিয়ে আসার প্রতি।</p>
       <div class="blog-grid" id="blogGrid"></div>
-      <div class="more-wrap reveal"><a class="more-btn" href="blogs.html" style="text-decoration:none">All blogs
+      <div class="more-wrap reveal"><a class="more-btn" href="blogs.html">All blogs
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a></div>
     </div>
   </section>
@@ -421,7 +400,7 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
 
   <section class="video-band">
     <div class="wrap">
-      <p class="awesome reveal">"Don't forget to be <em>awesome</em>."</p>
+      <p class="awesome reveal" data-skey="quote_awesome">"Don't forget to be <em>awesome</em>."</p>
       <div class="video reveal" id="video" role="button" tabindex="0" aria-label="Play video">
         <img src="https://i.ytimg.com/vi/3NKFi1USQSQ/maxresdefault.jpg" alt="Video thumbnail" loading="lazy">
         <span class="play"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>
@@ -453,7 +432,7 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
   <section id="contact">
     <div class="wrap">
       <p class="sec-tag mono reveal"><b>06</b>Contact</p>
-      <h2 class="contact-big reveal">Don't hesitate to <em>knock on my door</em>.</h2>
+      <h2 class="contact-big reveal" data-skey="contact_heading">Don't hesitate to <em>knock on my door</em>.</h2>
       <div class="contact-grid">
         <div class="reveal">
           <p class="c-label">Email</p>
@@ -537,6 +516,9 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script src="posts.js"></script>
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="editor.js"></script>
 <script>
 "use strict";
 var $  = function(s){ return document.querySelector(s); };
@@ -547,23 +529,31 @@ function fmtDate(d){
   try{ return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
   catch(e){ return d; }
 }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-/* ═══ ব্লগ কার্ড (posts.js থেকে সর্বশেষ ৩টা) ═══ */
+/* ═══ ব্লগ কার্ড — editor.js এর posts থেকে ═══ */
 function renderBlogCards(){
   var grid = $('#blogGrid');
-  if (typeof BLOG_POSTS === 'undefined'){
+  var posts = (window.ShifatEditor && ShifatEditor.posts.length) ? ShifatEditor.posts
+            : (typeof BLOG_POSTS !== 'undefined' ? BLOG_POSTS : []);
+  var latest = posts.slice(0,3);
+  if (!latest.length){
     grid.innerHTML = '<div class="blog-empty">Blog posts will appear here.</div>';
     return;
   }
-  var posts = BLOG_POSTS.slice().sort(function(a,b){ return b.date.localeCompare(a.date); }).slice(0,3);
-  grid.innerHTML = posts.map(function(p){
-    return '<a class="post reveal in" href="blogs.html?p=' + encodeURIComponent(p.slug) + '">' +
-      '<span class="post-img"><img src="' + (p.cover||'') + '" alt="' + p.title + '" loading="lazy" onerror="this.style.display=\'none\'"></span>' +
-      '<span class="post-body"><span class="mono">' + fmtDate(p.date) + '</span><span class="post-title">' + p.title + '</span></span>' +
-      '<span class="post-link">Read on the blog <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a>';
+  grid.innerHTML = latest.map(function(p){
+    return '<a class="post reveal in" href="blogs.html?p=' + encodeURIComponent(p.slug) + '" data-slug="' + p.slug + '">' +
+      '<span class="post-img"><img src="' + (p.cover||'') + '" alt="' + esc(p.title) + '" loading="lazy" onerror="this.style.display=\'none\'"></span>' +
+      '<span class="post-body"><span class="mono">' + fmtDate(p.date) + '</span><span class="post-title">' + esc(p.title) + '</span></span>' +
+      '<span class="post-link">Read on the blog <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>' +
+      '<span class="pebtns">' +
+        '<button class="pebtn edit" title="Edit post" aria-label="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' +
+        '<button class="pebtn del" title="Delete post" aria-label="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>' +
+      '</span></a>';
   }).join('');
 }
-renderBlogCards();
+ShifatEditor.onChange = renderBlogCards;
+ShifatEditor.init();
 
 /* ═══ Research/Awards ডেটা (✏️ পরে আসল তথ্য দেবেন) ═══ */
 var RESEARCH = {
@@ -590,7 +580,6 @@ var RECOG = {
     { title:'Data software certificate', meta:'Issuer · Year', desc:'Short note.', file:'https://picsum.photos/seed/cert-t3/900/640.jpg' }
   ]
 };
-
 function entryHTML(e){
   var isPdf = e.file && e.file.toLowerCase().slice(-4) === '.pdf';
   var thumb = isPdf
@@ -598,9 +587,7 @@ function entryHTML(e){
     : '<button class="cert-thumb" data-file="' + e.file + '" aria-label="View certificate"><img src="' + e.file + '" alt="Certificate" loading="lazy"></button>';
   return '<article class="entry"><div><span class="meta">' + e.meta + '</span><h3>' + e.title + '</h3><p>' + e.desc + '</p></div>' + thumb + '</article>';
 }
-function renderList(list, el, limit){
-  el.innerHTML = list.slice(0, limit).map(entryHTML).join('');
-}
+function renderList(list, el, limit){ el.innerHTML = list.slice(0, limit).map(entryHTML).join(''); }
 renderList(RESEARCH.pubs, $('#list-pubs'), 3);
 renderList(RESEARCH.conf, $('#list-conf'), 3);
 renderList(RECOG.awards,  $('#list-awards'), 3);
@@ -638,7 +625,7 @@ function openMore(kind){
   document.body.style.overflow = 'hidden'; moreov.scrollTop = 0;
 }
 function closeMore(){ moreov.classList.remove('open'); moreov.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }
- $$('.more-btn').forEach(function(b){ b.addEventListener('click', function(){ openMore(b.getAttribute('data-more')); }); });
+ $$('.more-btn[data-more]').forEach(function(b){ b.addEventListener('click', function(){ openMore(b.getAttribute('data-more')); }); });
  $('#moreClose').addEventListener('click', closeMore);
 
 /* ═══ স্লাইডশো ═══ */
@@ -793,10 +780,7 @@ if ('IntersectionObserver' in window){
   });
 });
 addEventListener('keydown', function(e){
-  if (e.key === 'Escape'){
-    closeFv(); closeMore(); closeLb();
-    document.body.classList.remove('menu-open');
-  }
+  if (e.key === 'Escape'){ closeFv(); closeMore(); closeLb(); document.body.classList.remove('menu-open'); }
   if (lb.classList.contains('open')){
     if (e.key === 'ArrowRight') stepLb(1);
     if (e.key === 'ArrowLeft') stepLb(-1);
