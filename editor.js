@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   editor.js — লাইভ এডিট প্যানেল
+   editor.js — লাইভ এডিট প্যানেল (ছবি আপলোডসহ)
    লগইন → Ctrl+E এডিট মোড → Ctrl+S সেভ → Esc বন্ধ
    ডেটা থাকে Supabase-এ; সংযোগ না থাকলে সাইট তবুও চলে
    ═══════════════════════════════════════════════════ */
@@ -96,7 +96,11 @@ function injectUI(){
       '<label>শিরোনাম</label><input id="pmTitleIn" placeholder="লেখার শিরোনাম">' +
       '<div class="ed-row">' +
         '<div><label>তারিখ</label><input type="date" id="pmDate"></div>' +
-        '<div><label>কভার ছবির লিংক</label><input id="pmCover" placeholder="https://...jpg"></div>' +
+        '<div><label>কভার ছবি (আপলোড বা লিংক)</label>' +
+          '<input id="pmCover" placeholder="https://...jpg">' +
+          '<input type="file" id="pmCoverFile" accept="image/*" style="margin-top:.45rem;font-size:.78rem">' +
+          '<div id="pmCoverStatus" style="font-size:.75rem;color:rgba(241,238,230,.55);margin-top:.3rem"></div>' +
+        '</div>' +
       '</div>' +
       '<label>লেখা (প্যারার মাঝে একটি খালি লাইন দিন)</label>' +
       '<textarea id="pmBody" placeholder="আজকের চিন্তা…"></textarea>' +
@@ -125,6 +129,7 @@ function injectUI(){
   document.getElementById('pmSave').addEventListener('click', savePost);
   document.getElementById('pmClose').addEventListener('click', function(){ document.getElementById('edPost').classList.remove('open'); });
   document.getElementById('pmDel').addEventListener('click', deletePost);
+  document.getElementById('pmCoverFile').addEventListener('change', uploadCover);
   ['edLogin','edPost'].forEach(function(id){
     document.getElementById(id).addEventListener('click', function(e){
       if (e.target.id === id) e.target.classList.remove('open');
@@ -226,6 +231,45 @@ async function loadPosts(){
   return E.posts;
 }
 
+/* ---------- ছবি আপলোড (Supabase Storage) ---------- */
+function shrinkImage(file, maxW, cb){
+  var img = new Image();
+  var url = URL.createObjectURL(file);
+  img.onload = function(){
+    try{
+      var scale = Math.min(1, maxW / img.width);
+      var c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.width * scale));
+      c.height = Math.max(1, Math.round(img.height * scale));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(function(blob){ cb(blob || file); }, 'image/jpeg', .85);
+    }catch(err){ cb(file); }
+    URL.revokeObjectURL(url);
+  };
+  img.onerror = function(){ cb(file); };
+  img.src = url;
+}
+async function uploadCover(e){
+  var f = e.target.files && e.target.files[0];
+  if (!f) return;
+  var status = document.getElementById('pmCoverStatus');
+  if (!SB){ status.textContent = 'Supabase সংযোগ নেই'; return; }
+  if (f.size > 8*1024*1024){ status.textContent = 'ছবিটা খুব বড় — ৮MB-এর নিচের ছবি দিন'; e.target.value = ''; return; }
+  status.textContent = 'প্রস্তুত হচ্ছে…';
+  shrinkImage(f, 1600, function(blob){
+    status.textContent = 'আপলোড হচ্ছে…';
+    var name = 'cover-' + Date.now() + '-' + Math.random().toString(36).slice(2,7) + '.jpg';
+    SB.storage.from('covers').upload(name, blob, { contentType:'image/jpeg', cacheControl:'31536000', upsert:false })
+      .then(function(r){
+        if (r.error){ status.textContent = 'আপলোড ব্যর্থ: ' + r.error.message; return; }
+        var pub = SB.storage.from('covers').getPublicUrl(name);
+        document.getElementById('pmCover').value = pub.data.publicUrl;
+        status.textContent = 'আপলোড সম্পন্ন ✔ লিংক বসে গেছে';
+        toastE('ছবি আপলোড হয়েছে ✔');
+      });
+  });
+}
+
 /* ---------- পোস্ট মোডাল ---------- */
 function findPost(slug){
   for (var i=0;i<E.posts.length;i++) if (E.posts[i].slug === slug) return E.posts[i];
@@ -240,6 +284,8 @@ function openPostModal(slug){
   document.getElementById('pmDate').value = p ? p.date : new Date().toISOString().slice(0,10);
   document.getElementById('pmCover').value = p ? (p.cover || '') : '';
   document.getElementById('pmBody').value = p ? (p.body || '') : '';
+  document.getElementById('pmCoverFile').value = '';
+  document.getElementById('pmCoverStatus').textContent = '';
   document.getElementById('pmDel').style.display = p ? '' : 'none';
   document.getElementById('edPost').classList.add('open');
   setTimeout(function(){ document.getElementById('pmTitleIn').focus(); }, 60);
