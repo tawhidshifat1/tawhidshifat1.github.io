@@ -1,17 +1,18 @@
-/* editor.js — লাইভ এডিট প্যানেল v2 (এন্ট্রি/গ্যালারি/ভিডিও/পাবলিক লিংকসহ) */
+/* editor.js v3 — ব্লগ, এন্ট্রি, গ্যালারি, ভিডিও, পাবলিক লিংক, ভ্রমণ, হাবিজাবি */
 (function(){
 "use strict";
 var SB=null;
-try{ if(typeof window.supabase!=='undefined'&&typeof SUPABASE_URL!=='undefined'&&SUPABASE_URL){ SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);} }catch(e){}
+try{if(typeof window.supabase!=='undefined'&&typeof SUPABASE_URL!=='undefined'&&SUPABASE_URL){SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}}catch(e){}
 window.ShifatSB=SB;
 var E=window.ShifatEditor={on:false,loggedIn:false,dirty:{},posts:[],editingSlug:null,onChange:null,
-  data:{pubs:[],confs:[],awards:[],certs:[],plinks:[],gphotos:[]},videos:{video1:'',video2:''}};
-var KINDS={pub:{t:'research_entries'},conf:{t:'research_entries'},award:{t:'recog_entries'},cert:{t:'recog_entries'},plink:{t:'public_links'},gphoto:{t:'gallery_photos'}};
+data:{pubs:[],confs:[],awards:[],certs:[],plinks:[],gphotos:[],travels:[],hubis:[]},videos:{video1:'',video2:''}};
+var TABLES={pub:'research_entries',conf:'research_entries',award:'recog_entries',cert:'recog_entries',plink:'public_links',travel:'journal_entries',hubijabi:'journal_entries'};
+function isJ(k){return k==='travel'||k==='hubijabi';}
 
-function toastE(msg){var w=document.getElementById('toastWrap');if(!w){alert(msg);return;}
- var t=document.createElement('div');t.className='toast';t.textContent=msg;w.appendChild(t);
- requestAnimationFrame(function(){t.classList.add('show');});
- setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},400);},3200);}
+function toastE(m){var w=document.getElementById('toastWrap');if(!w){alert(m);return;}
+var t=document.createElement('div');t.className='toast';t.textContent=m;w.appendChild(t);
+requestAnimationFrame(function(){t.classList.add('show');});
+setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},400);},3200);}
 
 var st=document.createElement('style');
 st.textContent=['.ed-lock{position:fixed;right:1.1rem;bottom:1.1rem;z-index:3400;width:40px;height:40px;border-radius:50%;border:1px solid rgba(226,180,90,.5);background:rgba(21,20,18,.78);color:#E2B45A;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.4;transition:.3s}',
@@ -25,10 +26,9 @@ st.textContent=['.ed-lock{position:fixed;right:1.1rem;bottom:1.1rem;z-index:3400
 '.ed-hint{font-size:.7rem;color:rgba(241,238,230,.5);font-family:"Roboto Mono",monospace}',
 'body.ed-on [data-skey]{outline:2px dashed rgba(226,180,90,.65);outline-offset:5px;border-radius:3px;cursor:text}',
 'body.ed-on [data-skey]:hover{background:rgba(226,180,90,.12)}',
-'body.ed-on [data-skey]:focus{outline-style:solid;background:rgba(226,180,90,.1)}',
 '.ed-add{display:none!important}body.ed-on .ed-add{display:inline-flex!important;align-items:center;gap:.4rem;background:none;border:1px dashed rgba(226,180,90,.6);color:#E2B45A;border-radius:999px;padding:.45rem 1.1rem;font-family:"Poppins",sans-serif;font-weight:500;font-size:.85rem;cursor:pointer;margin-top:1rem}',
 '.ed-add:hover{background:#E2B45A;color:#221A08}',
-'.entry,.post,.pl-card,.slide-stage,.thumbs button{position:relative}',
+'.entry,.post,.pl-card{position:relative}',
 '.pebtns{position:absolute;top:.5rem;right:.5rem;display:none;gap:.35rem;z-index:5}',
 'body.ed-on .pebtns{display:flex}',
 '.pebtn{width:32px;height:32px;border-radius:6px;border:1px solid rgba(241,238,230,.35);background:rgba(12,11,9,.75);color:#F1EEE6;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.25s;padding:0;font-size:.85rem}',
@@ -69,20 +69,24 @@ function injectUI(){
  '<button class="ed-btn" id="pmDel" style="border-color:rgba(224,112,90,.5);color:#e0705a">🗑 ডিলিট</button>'+
  '<button class="ed-btn" id="pmClose">বন্ধ</button></div></div></div>'+
  '<div class="ed-ov" id="edEntry"><div class="ed-panel"><h3 id="enHead">এন্ট্রি</h3>'+
- '<label>শিরোনাম</label><input id="enTitle">'+
+ '<label id="enTL">শিরোনাম</label><input id="enTitle">'+
  '<div class="ed-row"><div><label>সাব-লেবেল (Journal · Year)</label><input id="enMeta"></div>'+
- '<div><label>লিংক (ওয়েবসাইট হলে)</label><input id="enUrl" placeholder="https://..."></div></div>'+
- '<label>ছোট বিবরণ</label><textarea id="enDesc" style="min-height:90px"></textarea>'+
- '<label>ছবি/সার্টিফিকেট (আপলোড/লিংক)</label><input id="enFile" placeholder="https://...jpg/pdf">'+
+ '<div><label>লিংক</label><input id="enUrl" placeholder="https://..."></div></div>'+
+ '<div class="ed-row" id="enJRow"><div><label>তারিখ</label><input type="date" id="enDate"></div>'+
+ '<div><label>স্থান</label><input id="enPlace" placeholder="কোথায়?"></div></div>'+
+ '<label id="enVL">ভিডিও লিংক (YouTube/ডকুমেন্টারি)</label><input id="enVideo" placeholder="https://youtu.be/...">'+
+ '<label id="enDL">ছোট বিবরণ</label><textarea id="enDesc" style="min-height:80px"></textarea>'+
+ '<label>ছবি/সার্টিফিকেট (আপলোড/লিংক)</label><input id="enFile" placeholder="https://...jpg">'+
  '<input type="file" id="enFileIn" accept="image/*,.pdf" style="margin-top:.45rem;font-size:.78rem"><div class="ed-note" id="enStatus"></div>'+
+ '<label id="enBL">বড় লেখা (প্যারার মাঝে খালি লাইন)</label><textarea id="enBody" style="min-height:150px"></textarea>'+
  '<div class="ed-acts"><button class="ed-btn primary" id="enSave">💾 সেভ</button><span class="sp"></span>'+
  '<button class="ed-btn" id="enDel" style="border-color:rgba(224,112,90,.5);color:#e0705a">🗑 ডিলিট</button>'+
  '<button class="ed-btn" id="enClose">বন্ধ</button></div></div></div>';
  document.body.appendChild(d);
- document.getElementById('edLock').addEventListener('click',function(){ if(E.loggedIn)setMode(!E.on); else openLogin(); });
+ document.getElementById('edLock').addEventListener('click',function(){if(E.loggedIn)setMode(!E.on);else openLogin();});
  document.getElementById('edSave').addEventListener('click',saveContent);
  document.getElementById('edNew').addEventListener('click',function(){openPostModal(null);});
- document.getElementById('edLogout').addEventListener('click',async function(){ if(SB)await SB.auth.signOut(); setMode(false); toastE('লগআউট হয়েছে'); });
+ document.getElementById('edLogout').addEventListener('click',async function(){if(SB)await SB.auth.signOut();setMode(false);toastE('লগআউট হয়েছে');});
  document.getElementById('lgGo').addEventListener('click',doLogin);
  document.getElementById('lgPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
  document.getElementById('pmSave').addEventListener('click',savePost);
@@ -97,16 +101,16 @@ function injectUI(){
 }
 function uploadTo(e,bucket,cb){
  var f=e.target.files&&e.target.files[0];if(!f)return;
- var stEl=e.target.parentNode.querySelector('.ed-note');
- if(!SB){if(stEl)stEl.textContent='Supabase সংযোগ নেই';return;}
- if(f.size>8*1024*1024){if(stEl)stEl.textContent='ছবি খুব বড় (৮MB ম্যাক্স)';return;}
- if(stEl)stEl.textContent='আপলোড হচ্ছে…';
+ var sEl=e.target.parentNode.querySelector('.ed-note');
+ if(!SB){if(sEl)sEl.textContent='Supabase সংযোগ নেই';return;}
+ if(f.size>8*1024*1024){if(sEl)sEl.textContent='ছবি খুব বড় (৮MB ম্যাক্স)';return;}
+ if(sEl)sEl.textContent='আপলোড হচ্ছে…';
  shrink(f,1600,function(blob){
   var name='up-'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.jpg';
   SB.storage.from(bucket).upload(name,blob,{contentType:'image/jpeg',cacheControl:'31536000'}).then(function(r){
-   if(r.error){if(stEl)stEl.textContent='ব্যর্থ: '+r.error.message;return;}
+   if(r.error){if(sEl)sEl.textContent='ব্যর্থ: '+r.error.message;return;}
    var pub=SB.storage.from(bucket).getPublicUrl(name);
-   cb(pub.data.publicUrl); toastE('ছবি আপলোড হয়েছে ✔');
+   cb(pub.data.publicUrl);toastE('ছবি আপলোড হয়েছে ✔');
   });
  });
 }
@@ -163,20 +167,28 @@ async function loadPosts(){
 }
 async function loadAll(){
  if(!SB)return;
- function map(rows,kind){return (rows||[]).map(function(x){return{kind:kind,id:x.id,title:x.title||'',meta:x.meta||'',descr:(x.descr!==undefined?x.descr:(x.note||'')),file:(x.file||x.image||x.url||''),url:x.url||''};});}
+ function norm(x,kind){return{kind:kind,id:x.id,slug:x.slug||'',title:x.title||'',meta:x.meta||'',descr:(x.descr!==undefined?x.descr:(x.note||'')),file:(x.file||x.image||''),url:x.url||'',date:x.date||'',place:x.place||'',video:x.video||'',body:x.body||''};}
  try{
   var a=await SB.from('research_entries').select('*').order('created_at',{ascending:false});
-  if(!a.error&&a.data){E.data.pubs=map(a.data.filter(function(x){return x.type==='pub';}),'pub');E.data.confs=map(a.data.filter(function(x){return x.type==='conf';}),'conf');}
+  if(!a.error&&a.data){E.data.pubs=a.data.filter(function(x){return x.type==='pub';}).map(function(x){return norm(x,'pub');});
+   E.data.confs=a.data.filter(function(x){return x.type==='conf';}).map(function(x){return norm(x,'conf');});}
   var b=await SB.from('recog_entries').select('*').order('created_at',{ascending:false});
-  if(!b.error&&b.data){E.data.awards=map(b.data.filter(function(x){return x.type==='award';}),'award');E.data.certs=map(b.data.filter(function(x){return x.type==='cert';}),'cert');}
+  if(!b.error&&b.data){E.data.awards=b.data.filter(function(x){return x.type==='award';}).map(function(x){return norm(x,'award');});
+   E.data.certs=b.data.filter(function(x){return x.type==='cert';}).map(function(x){return norm(x,'cert');});}
   var c=await SB.from('gallery_photos').select('*').order('created_at',{ascending:false});
   if(!c.error&&c.data&&c.data.length)E.data.gphotos=c.data.map(function(x){return{id:x.id,file:x.url};});
   var d=await SB.from('public_links').select('*').order('created_at',{ascending:false});
-  if(!d.error&&d.data)E.data.plinks=map(d.data,'plink');
+  if(!d.error&&d.data)E.data.plinks=d.data.map(function(x){return norm(x,'plink');});
+  var j=await SB.from('journal_entries').select('*').order('date',{ascending:false});
+  if(!j.error&&j.data){
+   E.data.travels=j.data.filter(function(x){return x.type==='travel';}).map(function(x){var n=norm(x,'travel');n.id=x.slug;n.slug=x.slug;n.descr=(x.body||'').replace(/\s+/g,' ').trim().slice(0,110);return n;});
+   E.data.hubis=j.data.filter(function(x){return x.type==='hubijabi';}).map(function(x){var n=norm(x,'hubijabi');n.id=x.slug;n.slug=x.slug;n.descr=(x.body||'').replace(/\s+/g,' ').trim().slice(0,110);return n;});
+  }
  }catch(e){}
 }
 function findPost(slug){for(var i=0;i<E.posts.length;i++)if(E.posts[i].slug===slug)return E.posts[i];return null;}
-function findEntry(kind,id){var arr=E.data[kind+'s']||[];for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i];return null;}
+function jarr(kind){return kind==='travel'?E.data.travels:kind==='hubijabi'?E.data.hubis:E.data[kind+'s'];}
+function findEntry(kind,id){var a=jarr(kind)||[];for(var i=0;i<a.length;i++){if(a[i].id===id||a[i].slug===id)return a[i];}return null;}
 function openPostModal(slug){
  if(!SB){toastE('Supabase সংযোগ নেই');return;}
  E.editingSlug=slug;var p=slug?findPost(slug):null;
@@ -212,46 +224,71 @@ var enKind=null,enId=null;
 function openEntryModal(kind,id){
  if(!SB){toastE('Supabase সংযোগ নেই');return;}
  enKind=kind;enId=id;
- var labels={pub:'Publication',conf:'Conference',award:'Award',cert:'Certificate',plink:'Public Link',gphoto:'গ্যালারি ছবি'};
- var e=id?findEntry(kind,id):null;
+ var J=isJ(kind),e=id?findEntry(kind,id):null;
+ var labels={pub:'Publication',conf:'Conference',award:'Award',cert:'Certificate',plink:'Public Link',travel:'ভ্রমণ',hubijabi:'হাবিজাবি'};
  document.getElementById('enHead').textContent=(id?'এডিট: ':'নতুন ')+(labels[kind]||kind);
  document.getElementById('enTitle').value=e?e.title:'';
- document.getElementById('enMeta').value=e?e.meta:'';
+ document.getElementById('enMeta').value=e?(e.meta||''):'';
  document.getElementById('enUrl').value=e?(e.url||''):'';
- document.getElementById('enDesc').value=e?e.descr:'';
+ document.getElementById('enDesc').value=e?(e.descr||''):'';
  document.getElementById('enFile').value=e?(e.file||''):'';
+ document.getElementById('enDate').value=(e&&e.date)?e.date:new Date().toISOString().slice(0,10);
+ document.getElementById('enPlace').value=e?(e.place||''):'';
+ document.getElementById('enVideo').value=e?(e.video||''):'';
+ document.getElementById('enBody').value=e?(e.body||''):'';
  document.getElementById('enFileIn').value='';document.getElementById('enStatus').textContent='';
- var showT=kind!=='gphoto',showM=['pub','conf','award','cert'].indexOf(kind)>-1,showU=kind==='plink';
- document.getElementById('enTitle').parentNode.style.display=showT?'':'none';
- document.getElementById('enMeta').closest('.ed-row').style.display=(showM||showU)?'':'none';
- document.getElementById('enMeta').style.display=showM?'':'none';
- document.getElementById('enUrl').style.display=showU?'':'none';
- var lab=document.getElementById('enUrl').previousElementSibling;if(lab)lab.style.display=showU?'':'none';
- document.getElementById('enDesc').style.display=kind==='gphoto'?'none':'';
- document.getElementById('enDesc').previousElementSibling.style.display=kind==='gphoto'?'none':'';
+ var showT=kind!=='gphoto';
+ var tEl=document.getElementById('enTitle');
+ tEl.style.display=showT?'':'none';
+ document.getElementById('enTL').style.display=showT?'':'none';
+ var row2=document.getElementById('enMeta').closest('.ed-row');
+ row2.style.display=(J||kind==='gphoto')?'none':'';
+ document.getElementById('enMeta').style.display=(kind==='plink'&&!J)?'none':'';
+ document.getElementById('enUrl').style.display=(kind==='plink'&&!J)?'':'none';
+ var ul=document.getElementById('enUrl').previousElementSibling;
+ if(ul)ul.style.display=(kind==='plink'&&!J)?'':'none';
+ document.getElementById('enDL').style.display=(J||kind==='gphoto')?'none':'';
+ document.getElementById('enDesc').style.display=(J||kind==='gphoto')?'none':'';
+ document.getElementById('enJRow').style.display=J?'':'none';
+ document.getElementById('enVL').style.display=J?'':'none';
+ document.getElementById('enVideo').style.display=J?'':'none';
+ document.getElementById('enBL').style.display=J?'':'none';
+ document.getElementById('enBody').style.display=J?'':'none';
  document.getElementById('enDel').style.display=id?'':'none';
  document.getElementById('edEntry').classList.add('open');
 }
 async function saveEntry(){
  var kind=enKind;if(!kind)return;
  var title=document.getElementById('enTitle').value.trim();
- var meta=document.getElementById('enMeta').value.trim();
- var url=document.getElementById('enUrl').value.trim();
- var descr=document.getElementById('enDesc').value.trim();
  var file=document.getElementById('enFile').value.trim();
  if(kind!=='gphoto'&&!title){toastE('শিরোনাম লিখুন!');return;}
  if(kind==='gphoto'&&!file){toastE('ছবি আপলোড বা লিংক দিন!');return;}
  var b=document.getElementById('enSave');b.disabled=true;b.textContent='সেভ হচ্ছে…';
  var err=null;
  try{
-  if(kind==='pub'||kind==='conf'){var row={title:title,meta:meta,descr:descr,file:file};if(kind==='conf')row.type='conf';else row.type='pub';if(enId)row.id=enId;
-   var r=await SB.from('research_entries').upsert(row);err=r.error;}
-  else if(kind==='award'||kind==='cert'){var row2={title:title,meta:meta,descr:descr,file:file,type:kind};if(enId)row2.id=enId;
-   var r2=await SB.from('recog_entries').upsert(row2);err=r2.error;}
-  else if(kind==='plink'){var row3={title:title,url:url,note:descr,image:file};if(enId)row3.id=enId;
-   var r3=await SB.from('public_links').upsert(row3);err=r3.error;}
-  else if(kind==='gphoto'){var row4={url:file};if(enId)row4.id=enId;
-   var r4=await SB.from('gallery_photos').upsert(row4);err=r4.error;}
+  if(isJ(kind)){
+   var date=document.getElementById('enDate').value||new Date().toISOString().slice(0,10);
+   var row={type:kind,slug:enId||(date+'-'+Math.random().toString(36).slice(2,7)),title:title,date:date,
+    place:document.getElementById('enPlace').value.trim(),
+    video:document.getElementById('enVideo').value.trim(),
+    image:file,body:document.getElementById('enBody').value};
+   var r=await SB.from('journal_entries').upsert(row,{onConflict:'slug'});err=r.error;
+  }else if(kind==='pub'||kind==='conf'){
+   var row1={type:kind,title:title,meta:document.getElementById('enMeta').value.trim(),
+    descr:document.getElementById('enDesc').value.trim(),file:file};if(enId)row1.id=enId;
+   var r1=await SB.from('research_entries').upsert(row1);err=r1.error;
+  }else if(kind==='award'||kind==='cert'){
+   var row2={type:kind,title:title,meta:document.getElementById('enMeta').value.trim(),
+    descr:document.getElementById('enDesc').value.trim(),file:file};if(enId)row2.id=enId;
+   var r2=await SB.from('recog_entries').upsert(row2);err=r2.error;
+  }else if(kind==='plink'){
+   var row3={title:title,url:document.getElementById('enUrl').value.trim(),
+    note:document.getElementById('enDesc').value.trim(),image:file};if(enId)row3.id=enId;
+   var r3=await SB.from('public_links').upsert(row3);err=r3.error;
+  }else if(kind==='gphoto'){
+   var row4={url:file};if(enId)row4.id=enId;
+   var r4=await SB.from('gallery_photos').upsert(row4);err=r4.error;
+  }
  }catch(ex){err=ex;}
  b.disabled=false;b.textContent='💾 সেভ';
  if(err){toastE('সেভ হয়নি: '+(err.message||err));return;}
@@ -259,9 +296,8 @@ async function saveEntry(){
  await loadAll();if(E.onChange)E.onChange();
 }
 async function deleteEntry(){
- if(!enId)return;if(!confirm('মুছে ফেলবেন?'))return;
- await SB.from(KINDS[enKind].t).delete().eq('id',enId);
- if(enKind==='gphoto'){try{await SB.from('gallery_photos').delete().eq('id',enId);}catch(e){}}
+ if(!enKind||!enId)return;if(!confirm('মুছে ফেলবেন?'))return;
+ try{ if(isJ(enKind)){await SB.from(TABLES[enKind]).delete().eq('slug',enId);} else {await SB.from(TABLES[enKind]).delete().eq('id',enId);} }catch(e){}
  document.getElementById('edEntry').classList.remove('open');toastE('মুছে ফেলা হয়েছে');
  await loadAll();if(E.onChange)E.onChange();
 }
@@ -281,6 +317,13 @@ async function addGalleryByFile(input){
  });
  input.value='';
 }
+function parseYT(v){
+ if(!v)return'';v=v.trim();
+ var m=v.match(/(?:youtu\.be\/|v=|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/);
+ if(m)return m[1];
+ if(/^[A-Za-z0-9_-]{11}$/.test(v))return v;
+ return'';
+}
 async function editVideo(vkey){
  var cur=E.videos[vkey]||'';
  var v=prompt('YouTube লিংক বা Video ID দিন:',cur?'https://youtu.be/'+cur:'');
@@ -290,13 +333,6 @@ async function editVideo(vkey){
  await SB.from('site_content').upsert({key:vkey,value:id,updated_at:new Date().toISOString()},{onConflict:'key'});
  E.videos[vkey]=id;toastE('ভিডিও বদলানো হয়েছে ✔');
  if(E.onChange)E.onChange();
-}
-function parseYT(v){
- if(!v)return'';v=v.trim();
- var m=v.match(/(?:youtu\.be\/|v=|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/);
- if(m)return m[1];
- if(/^[A-Za-z0-9_-]{11}$/.test(v))return v;
- return'';
 }
 document.addEventListener('click',function(e){
  if(!e.target.closest)return;
