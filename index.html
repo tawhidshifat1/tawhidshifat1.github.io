@@ -42,7 +42,7 @@ html.js body.loaded .hero-left>*:nth-child(5){transition-delay:.37s}
 .icon-btn{width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:none;display:flex;align-items:center;justify-content:center;transition:.3s}
 .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
 [data-theme="dark"] .icon-sun{display:none}[data-theme="light"] .icon-moon{display:none}
-.burger{display:none;flex-direction:column;gap:5px}.burger span{width:16px;height:1.6px;background:var(--ink);display:block;transition:.35s}
+.burger{display:flex;flex-direction:column;gap:5px}.burger span{width:16px;height:1.6px;background:var(--ink);display:block;transition:.35s}
 body.menu-open .burger span:nth-child(1){transform:translateY(3.3px) rotate(45deg)}
 body.menu-open .burger span:nth-child(2){transform:translateY(-3.3px) rotate(-45deg)}
 .resume-btn{border:1px solid var(--line);border-radius:2px;padding:.55rem 1.1rem;font-family:var(--f-head);font-weight:500;font-size:.88rem;text-decoration:none;transition:.3s;white-space:nowrap}
@@ -225,10 +225,9 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
   <a class="logo" href="index.html">Shifat<span class="dot">.</span></a>
   <nav aria-label="Main"><ul class="nav-links">
    <li><a href="#about">About</a></li><li><a href="blogs.html">Blogs</a></li>
-   <li><a href="#research">Research</a></li><li><a href="#gallery">Gallery</a></li>
-   <li><a href="#presence">Public</a></li><li><a href="#awards">Awards</a></li>
-   <li><a href="#contact">Contact</a></li>
-  </ul></nav>
+   <li><a href="#research">Research</a></li><li><a href="#travel">Travel</a></li>
+   <li><a href="#hubijabi">হাবিজাবি</a></li><li><a href="#contact">Contact</a></li>
+</ul></nav>
   <div class="nav-right">
    <a class="resume-btn" href="resume.html">Resume</a>
    <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">
@@ -240,11 +239,12 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
  </div>
 </header>
 
-<nav class="mmenu" aria-label="Mobile menu">
+<nav class="mmenu" aria-label="Menu">
  <a href="#about">About <small>01</small></a><a href="blogs.html">Blogs <small>02</small></a>
  <a href="#research">Research <small>03</small></a><a href="#gallery">Gallery <small>04</small></a>
- <a href="#presence">Public <small>05</small></a><a href="#awards">Awards <small>06</small></a>
- <a href="#contact">Contact <small>07</small></a><a href="resume.html">Resume <small>08</small></a>
+ <a href="#presence">Public <small>05</small></a><a href="#travel">Travel <small>06</small></a>
+ <a href="#hubijabi">হাবিজাবি <small>07</small></a><a href="#awards">Awards <small>08</small></a>
+ <a href="#contact">Contact <small>09</small></a><a href="resume.html">Resume <small>10</small></a>
  <p class="mmenu-foot mono">Optimistic · Learner · Debater</p>
 </nav>
 
@@ -353,7 +353,27 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
    <div style="text-align:center"><button class="ed-add" data-add="plink">＋ নতুন লিংক</button></div>
   </div>
  </section>
+ 
+ <section id="travel" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+   <div class="sec-head reveal"><p class="sec-tag mono"><b>06</b>Travel</p>
+    <h2 data-skey="travel_h2">ভ্রমণ, <em>পথের দিকে</em></h2></div>
+   <p class="reveal" style="color:var(--muted);font-weight:300;max-width:60ch;margin-bottom:2.2rem" data-skey="travel_lede">কোথায় গেলাম, কী দেখলাম — ছবি, ভিডিও, ডকুমেন্টারি আর পথের গল্প।</p>
+   <div class="pl-grid" id="travelGrid"></div>
+   <div style="text-align:center"><button class="ed-add" data-add="travel">＋ নতুন ভ্রমণ</button></div>
+  </div>
+ </section>
 
+ <section id="hubijabi" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+   <div class="sec-head reveal"><p class="sec-tag mono"><b>07</b>হাবিজাবি</p>
+    <h2 data-skey="hubi_h2">আজেবাজে, <em>স্মৃতির খাতা</em></h2></div>
+   <p class="reveal" style="color:var(--muted);font-weight:300;max-width:60ch;margin-bottom:2.2rem" data-skey="hubi_lede">নিয়মিত জীবনের ছোট ছোট মুহূর্ত — দিন হাতে নামতে নামতে গ্যালারির পুরনো অ্যালবামের মতোই মন ভালো করে দেবে।</p>
+   <div class="pl-grid" id="hubiGrid"></div>
+   <div style="text-align:center"><button class="ed-add" data-add="hubijabi">＋ নতুন হাবিজাবি</button></div>
+  </div>
+ </section>
+ 
  <section class="video-band">
   <div class="wrap">
    <p class="awesome reveal" data-skey="quote_awesome">"Don't forget to be <em>awesome</em>."</p>
@@ -364,7 +384,7 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
 
  <section id="awards">
   <div class="wrap">
-   <div class="sec-head reveal"><p class="sec-tag mono"><b>06</b>Recognition</p>
+   <div class="sec-head reveal"><p class="sec-tag mono"><b>08</b>Recognition</p>
     <h2 data-skey="awards_h2">Awards &amp; <em>certifications</em></h2></div>
    <div class="two-col">
     <div class="reveal"><h3>Awards</h3><div id="list-awards"></div>
@@ -378,7 +398,7 @@ footer{border-top:1px solid var(--line);padding:2.4rem 0}
 
  <section id="contact">
   <div class="wrap">
-   <p class="sec-tag mono reveal"><b>07</b>Contact</p>
+   <p class="sec-tag mono reveal"><b>09</b>Contact</p>
    <h2 class="contact-big reveal" data-skey="contact_heading">Don't hesitate to <em>knock on my door</em>.</h2>
    <div class="contact-grid">
     <div class="reveal">
@@ -528,7 +548,7 @@ function renderVideos(){
  var ids=[V.video1||'3NKFi1USQSQ',V.video2||'3NKFi1USQSQ'];
  $('#vGrid').innerHTML=ids.map(function(id,i){
   var key=i===0?'video1':'video2';
-  return '<div class="video reveal" data-yt="'+id+'" role="button" tabindex="0"><img src="https://i.ytimg.com/vi/'+id+'/hqdefault.jpg" alt="Video" loading="lazy">'+
+  return '<div class="video reveal in" data-yt="'+id+'" role="button" tabindex="0"><img src="https://i.ytimg.com/vi/'+id+'/hqdefault.jpg" alt="Video" loading="lazy">'+
   '<span class="play"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>'+
   '<span class="pebtns"><button class="pebtn vedit" data-vkey="'+key+'" title="ভিডিও লিংক বদলান">🔗</button></span></div>';
  }).join('');
@@ -579,7 +599,7 @@ addEventListener('scroll',function(){if(ticking)return;ticking=true;requestAnima
  var h=document.documentElement.scrollHeight-innerHeight;$('#progress').style.width=(h>0?(y/h)*100:0)+'%';ticking=false;});},{passive:true});
 var navMap={};$$('.nav-links a').forEach(function(a){if(a.hash)navMap[a.hash.slice(1)]=a;});
 if('IntersectionObserver' in window){var sio=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){$$('.nav-links a').forEach(function(a){a.classList.remove('act');});if(navMap[en.target.id])navMap[en.target.id].classList.add('act');}});},{rootMargin:'-40% 0px -55%'});
- ['about','research','gallery','presence','awards','contact'].forEach(function(id){var el=document.getElementById(id);if(el)sio.observe(el);});}
+ ['about','research','gallery','presence','travel','hubijabi','awards','contact'].forEach(function(id){var el=document.getElementById(id);if(el)sio.observe(el);});}
  $('#burger').addEventListener('click',function(){document.body.classList.toggle('menu-open');});
  $$('.mmenu a').forEach(function(a){a.addEventListener('click',function(){document.body.classList.remove('menu-open');});});
  $$('.tab').forEach(function(t){t.addEventListener('click',function(){$$('.tab').forEach(function(x){x.classList.remove('on');});$$('.panel').forEach(function(p){p.classList.remove('on');});t.classList.add('on');var p=document.getElementById('panel-'+t.dataset.tab);if(p)p.classList.add('on');});});
@@ -591,8 +611,22 @@ var EMAIL='shifat.iiuc@gmail.com';
  else toast('কপি করা গেল না');});
  $('#topBtn').addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'});});
 
+ /* ── Travel & হাবিজাবি ── */
+function jcard(e){
+ return '<a class="pl-card reveal in" href="journal.html?t='+e.kind+'&p='+encodeURIComponent(e.slug||e.id)+'">'+
+ '<span class="pl-img">'+(e.file?'<img src="'+esc(e.file)+'" alt="" loading="lazy">':'')+'</span>'+
+ '<span class="pl-body"><span class="mono">'+fmtDate(e.date)+(e.place?' · '+esc(e.place):'')+'</span>'+
+ '<span class="pl-title">'+esc(e.title)+'</span>'+(e.descr?'<span class="pl-note">'+esc(e.descr)+'…</span>':'')+'</span>'+
+ '<span class="pl-link">পড়ুন <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>'+
+ '<span class="pebtns"><button class="pebtn edit" data-kind="'+e.kind+'" data-id="'+(e.slug||e.id)+'">✏️</button><button class="pebtn del" data-kind="'+e.kind+'" data-id="'+(e.slug||e.id)+'">🗑</button></span></a>';
+}
+function renderJournal(){
+ var D=window[ED].data,t=(D.travels||[]),h=(D.hubis||[]);
+ $('#travelGrid').innerHTML=t.length?t.slice(0,3).map(jcard).join(''):'<p style="color:var(--faint);grid-column:1/-1">এডিট মোডে "＋ নতুন ভ্রমণ" দিয়ে যোগ করুন।</p>';
+ $('#hubiGrid').innerHTML=h.length?h.slice(0,3).map(jcard).join(''):'<p style="color:var(--faint);grid-column:1/-1">এডিট মোডে "＋ নতুন হাবিজাবি" দিয়ে যোগ করুন।</p>';
+}
 /* ── init ── */
-function renderAll(){renderBlogs();renderEntries();renderGallery();renderPlinks();renderVideos();}
+function renderAll(){renderBlogs();renderEntries();renderGallery();renderPlinks();renderVideos();renderJournal();}
 window[ED].onChange=renderAll;
 window[ED].init();
 </script>
